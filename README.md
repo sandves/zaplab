@@ -12,6 +12,7 @@ Lab 5: Processing channel zaps
 [f](#f) <br>
 [g](#g) <br>
 
+<a name="installation"/>
 ### Installation notes
 Coming soon!
 
