@@ -1,10 +1,27 @@
 Lab 5: Processing channel zaps
 ======
 
+##### Table of Contents
+[Installation notes](#installation) <br>
+######Tasks <br>
+[a](#a) <br>
+[b](#b) <br>
+[c](#c) <br>
+[d](#d) <br>
+[e](#e) <br>
+[f](#f) <br>
+[g](#g) <br>
+
+### Installation notes
+Coming soon!
+
 ### Tasks & Questions
 
+<a name="a"/>
 a) The number will sometimes be negative, but that is because we do not initially know how many viewers the channel has when we start listening for zaps.<br>
+<a name="b"/>
 b) It varies from time to time, but sometimes I see that when NRK gets more viewers, TV 2 gets less viewers and vice versa.<br>
+<a name="c"/>
 c)<br>
 1.
 ``` go
@@ -39,7 +56,9 @@ func computeZaps(z ztorage.Zapper) {
 }
 ```
 4.<br>
-(pprof) top10 - Total amount 15.3 MB <br>
+*(pprof) top10 - Total amount 15.3 MB* <br>
+We have allocated over 15 MB of memory in 10 minutes. This will grow
+indefinetely until our application will crash.<br>
 
 | | | | | | |
 |------|-------|-------|------|-------|----------------------------------|
@@ -56,6 +75,7 @@ func computeZaps(z ztorage.Zapper) {
 The slice based storage will never stop growing. We should consider using
 another data structure to keep control of zap events.
 
+<a name="d"/>
 d)<br>You can find the Top10 function in ztorage/ztoragesort.go
 ``` go
 func (zs *SliceZaps) TopTenChannels() []string {
@@ -70,8 +90,11 @@ func (zs *SliceZaps) TopTenChannels() []string {
 	return Top10(top10)
 }
 ```
+<a name="e"/>
 e) [ztorage.go](https://github.com/sandves/zaplab/blob/master/ztorage/ztorage.go) <br>
+<a name="f"/>
 f) [zapserver.go](https://github.com/sandves/zaplab/blob/master/zapserver/zapserver.go) <br>
+<a name="g"/>
 g) <br>
 
 ``` go 
