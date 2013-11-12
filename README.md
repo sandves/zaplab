@@ -94,6 +94,8 @@ func (zs *SliceZaps) TopTenChannels() []string {
 e) [ztorage.go](https://github.com/sandves/zaplab/blob/master/ztorage/ztorage.go) <br>
 <a name="f"/>
 f) [zapserver.go](https://github.com/sandves/zaplab/blob/master/zapserver/zapserver.go) <br>
+1. I would say that the access pattern is write-heavy because we constanly write zap events. We also perform reads, but this occurs much rarer. Consequences of a write-heavy access pattern is a greater chance of reading incorrect values from the data structure. <br> 
+2. We could protect the zap map with a lock to avoid returning incorrect statistics. <br>
 <a name="g"/>
 g) <br>
 
