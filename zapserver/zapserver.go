@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/sandves/zaplab/chzap"
-	"github.com/sandves/zaplab/ztorage"
+	"github.com/zaplab/chzap"
+	"github.com/zaplab/ztorage"
 	"net"
 	"os"
 	"os/signal"
@@ -13,11 +13,11 @@ import (
 	"time"
 )
 
-var zaps *ztorage.Zaps
+var zaps ztorage.Zaps
 var sliceZaps *ztorage.SliceZaps
 
-var sock *UDPConn
-var listener *TCPListener
+var sock *net.UDPConn
+var listener *net.TCPListener
 
 var task = flag.String("task", "", "Specify which task you want to run (a - g)")
 var memprofile = flag.String("memprofile", "", "Write memory profile to specified file")
@@ -37,24 +37,24 @@ func main() {
 	checkError(err)
 
 	zaps = ztorage.NewZapStore()
-	sliceZaps = slize.NewZapStore()
+	sliceZaps = ztorage.NewSliceZapStore()
 
 	determineTaskToRun()
 
 	writeMemProfifle()
 }
 
-func deterMineTaskToRun() {
-	switch task {
+func determineTaskToRun() {
+	switch *task {
 	case "a":
 		go handleZaps(sock, nil)
 	case "b":
 		fmt.Println("Take a look at chzap/chzap.go")
 	case "c":
-		go handleZaps(sock, sliceZaps)
-		go computeViewers("NRK1", sliceZaps)
-		go computeViewers("TV2 Norge", sliceZaps)
-		go computeZaps(sliceZaps)
+		go handleZaps(sock, ztorage.Zapper(sliceZaps))
+		go computeViewers("NRK1", ztorage.Zapper(sliceZaps))
+		go computeViewers("TV2 Norge", ztorage.Zapper(sliceZaps))
+		go computeZaps(ztorage.Zapper(sliceZaps))
 	case "d":
 		fmt.Println("Take a look at ztorage/slize.go")
 	case "e":
@@ -65,7 +65,7 @@ func deterMineTaskToRun() {
 	}
 }
 
-func handleZaps(conn *net.UDPConn, z *ztorage.Zapper) {
+func handleZaps(conn *net.UDPConn, z ztorage.Zapper) {
 	for {
 		var buf [1024]byte
 		n, _, err := conn.ReadFromUDP(buf[0:])
@@ -75,7 +75,7 @@ func handleZaps(conn *net.UDPConn, z *ztorage.Zapper) {
 		if len(strSlice) == 5 {
 			if z != nil {
 				var channelZap *chzap.ChZap = chzap.NewChZap(str)
-				z.Zaps.StoreZap(*channelZap)
+				z.StoreZap(*channelZap)
 			} else {
 				fmt.Println(str)
 			}
@@ -83,7 +83,7 @@ func handleZaps(conn *net.UDPConn, z *ztorage.Zapper) {
 	}
 }
 
-func handleClient(listener *net.TCPListener, z *ztorage.Zaps) {
+func handleClient(listener *net.TCPListener, z ztorage.Zaps) {
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
@@ -93,7 +93,7 @@ func handleClient(listener *net.TCPListener, z *ztorage.Zaps) {
 	}
 }
 
-func Stats(zs *ztorage.Zaps) string {
+func Stats(zs ztorage.Zaps) string {
 	topTen := zs.TopTenChannels()
 	var topTenStr string
 	for i := range topTen {
@@ -104,7 +104,7 @@ func Stats(zs *ztorage.Zaps) string {
 	return topTenStr
 }
 
-func Subscribe(conn net.Conn, z *ztorage.Zaps) {
+func Subscribe(conn net.Conn, z ztorage.Zaps) {
 	var stats string
 	for _ = range time.Tick(1 * time.Second) {
 		stats = Stats(z)
@@ -116,14 +116,14 @@ func Subscribe(conn net.Conn, z *ztorage.Zaps) {
 	}
 }
 
-func computeViewers(chName string, z *ztorage.Zapper) {
+func computeViewers(chName string, z ztorage.Zapper) {
 	for _ = range time.Tick(1 * time.Second) {
 		numberOfViewers := z.ComputeViewers(chName)
 		fmt.Printf("%s: %d\n", chName, numberOfViewers)
 	}
 }
 
-func computeZaps(z *ztorage.Zapper) {
+func computeZaps(z ztorage.Zapper) {
 	for _ = range time.Tick(5 * time.Second) {
 		fmt.Printf("Total number of zaps: %d\n", z.ComputeZaps())
 	}

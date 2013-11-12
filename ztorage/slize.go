@@ -1,13 +1,13 @@
 package ztorage
 
 import (
-	"github.com/sandves/zaplab/chzap"
+	"github.com/zaplab/chzap"
 )
 
 type SliceZaps []chzap.ChZap
 
-func NewZapStore() *Zaps {
-	zs := make(Zaps, 0)
+func NewSliceZapStore() *SliceZaps {
+	zs := make(SliceZaps, 0)
 	return &zs
 }
 
@@ -29,16 +29,15 @@ func (zs *SliceZaps) ComputeViewers(chName string) int {
 }
 
 func (zs *SliceZaps) ComputeZaps() int {
-	return len(zs)
+	return len(*zs)
 }
 
 func (zs *SliceZaps) TopTenChannels() []string {
-	top10 := make([string]int)
+	top10 := make(map[string]int)
 
-	for  _, v := range *zs {
-		if _, ok := top10[v.ToChan]; !ok
-				s = s[v.ToChan] = zs.ComputeViewers(v.ToChan))
-			}
+	for _, v := range *zs {
+		if _, ok := top10[v.ToChan]; !ok {
+			top10[v.ToChan] = zs.ComputeViewers(v.ToChan)
 		}
 	}
 

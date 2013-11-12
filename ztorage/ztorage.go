@@ -1,7 +1,7 @@
 package ztorage
 
 import (
-	"github.com/sandves/zaplab/chzap"
+	"github.com/zaplab/chzap"
 	"time"
 )
 
@@ -12,10 +12,10 @@ var totalZapDuration time.Duration
 var totalZapEvents int
 var stats Stats
 
-func NewZapStore() *Zaps {
+func NewZapStore() Zaps {
 	stats = make(Stats)
 	zs := make(Zaps)
-	return &zs
+	return zs
 }
 
 func (zs Zaps) StoreZap(z chzap.ChZap) {
@@ -59,6 +59,14 @@ func (zs Zaps) ComputeViewers(chName string) int {
 		}
 	}
 	return viewers
+}
+
+func (zs Zaps) ComputeZaps() int {
+	zaps := 0
+	for _, v := range zs {
+		zaps += v
+	}
+	return zaps
 }
 
 func (zs Zaps) AverageZapDuration() time.Duration {
