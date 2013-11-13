@@ -62,6 +62,8 @@ func determineTaskToRun() {
 	case "f", "g":
 		go handleZaps(sock, zaps)
 		go handleClient(listener, zaps)
+	default:
+		panic("unrecognized task")
 	}
 }
 
