@@ -14,7 +14,31 @@ Lab 5: Processing channel zaps
 
 <a name="installation"/>
 ### Installation notes
-Coming soon!
+Navigate to the directory you want to install zaplab, and follow these instructions:
+``` bash
+export GOPATH=`pwd`
+go get github.com/sandves/zaplab
+go install github.com/sandves/zaplab/zapserver
+go install github.com/sandves/zaplab/zapclient
+```
+Run each task using the task flag:
+``` bash
+cd bin #this is where the compiled program is located
+./zapserver -task=a # task must be a-f
+```
+For task f and g:
+``` bash
+# run server in background
+./zapserver -task=f &
+# or
+./zapserver -task=g &
+# then you can start the client
+./zapclient
+```
+If you want to write a memory profile, use the `-memprofile` flag, and specify a file name:
+``` bash
+./zapserver -memprofile=mem.prof
+```
 
 ### Tasks & Questions
 
