@@ -1,7 +1,7 @@
 package ztorage
 
 import (
-	"github.com/zaplab/chzap"
+	"github.com/sandves/zaplab/chzap"
 )
 
 type Zapper interface {

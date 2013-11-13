@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/zaplab/chzap"
-	"github.com/zaplab/ztorage"
+	"github.com/sandves/zaplab/chzap"
+	"github.com/sandves/zaplab/ztorage"
 	"net"
 	"os"
 	"os/signal"
