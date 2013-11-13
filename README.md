@@ -37,6 +37,7 @@ For task f and g:
 ```
 If you want to write a memory profile, use the `-memprofile` flag, and specify a file name:
 ``` bash
+# the memory profile will be written when you terminate the server by pressing `Ctrl + c`
 ./zapserver -memprofile=mem.prof
 ```
 
